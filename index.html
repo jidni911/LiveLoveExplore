@@ -1,548 +1,134 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Relaxing Bicycle Ride</title>
-<style>
-  :root { --ui-white: rgba(255,255,255,0.95); }
-  html,body { height:100%; margin:0; background:#000; font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;}
-  #container { position:relative; height:100vh; overflow:hidden; }
-  canvas { display:block; width:100%; height:100%; }
-  #ui {
-    position: absolute; left: 20px; top: 20px; z-index: 10;
-    display:flex; gap:8px; align-items:center;
-    background: rgba(0,0,0,0.2); padding:8px 10px; border-radius:10px;
-    backdrop-filter: blur(4px);
-  }
-  .btn {
-    background: rgba(255,255,255,0.06); color: var(--ui-white); border: none;
-    padding:6px 10px; border-radius:8px; cursor:pointer;
-  }
-  #title {
-    position: absolute; left:50%; transform:translateX(-50%);
-    top: 40px; z-index: 8; text-align:center;
-    font-size:28px; font-weight:600; color: rgba(255,255,255,0.95);
-    text-shadow: 0 6px 18px rgba(0,0,0,0.6);
-  }
-  #subtitle {
-    font-size:14px; opacity:0.9; margin-top:6px;
-  }
-  #credits {
-    position: absolute; right: 12px; bottom: 12px; z-index:9;
-    color: rgba(255,255,255,0.7); font-size:13px;
-    background: rgba(0,0,0,0.12); padding:6px 8px; border-radius:8px;
-  }
-  #playHint {
-    position:absolute; left:50%; transform:translateX(-50%); bottom:24px; z-index:9;
-    background: rgba(0,0,0,0.25); padding:6px 10px; border-radius:10px; color:var(--ui-white);
-    font-size:13px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <title>Live Love Explore</title>
+    <style>
+        :root {
+            --ui-white: rgba(255, 255, 255, 0.95);
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            background: #000;
+            font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial;
+        }
+
+        #container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #ui {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--ui-white);
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 40px;
+            z-index: 8;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+        }
+
+        #subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 6px;
+        }
+
+        #credits {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            z-index: 9;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            background: rgba(0, 0, 0, 0.12);
+            padding: 6px 8px;
+            border-radius: 8px;
+        }
+
+        #playHint {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 24px;
+            z-index: 9;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 6px 10px;
+            border-radius: 10px;
+            color: var(--ui-white);
+            font-size: 13px;
+        }
+    </style>
 </head>
 <body>
-<div id="container">
-  <canvas id="c"></canvas>
+    <div id="container">
+        <canvas id="c"></canvas>
 
-  <div id="title">
-    Live Love Explore 🌿
-    <div id="subtitle">Relaxing Bicycle Ride — no hurry, just scenery</div>
-  </div>
+        <div id="title">
+            Live Love Explore 🌿
+            <div id="subtitle">Relaxing Bicycle Ride — no hurry, just scenery</div>
+        </div>
 
-  <div id="ui">
-    <button id="toggleSound" class="btn">Play Music</button>
-    <button id="speedDown" class="btn">-</button>
-    <div id="speedLabel" style="color:var(--ui-white)">Speed: 1.0x</div>
-    <button id="speedUp" class="btn">+</button>
-  </div>
+        <div id="ui">
+            <button id="toggleSound" class="btn">Play Music</button>
+            <button id="speedDown" class="btn">-</button>
+            <div id="speedLabel" style="color:var(--ui-white)">Speed: 1.0x</div>
+            <button id="speedUp" class="btn">+</button>
+        </div>
 
-  <div id="playHint">Tip: Click "Play Music" to start ambient audio (browsers may block autoplay).</div>
-  <div id="credits">Built with Canvas • For passion</div>
-</div>
+        <div id="playHint">Tip: Click "Play Music" to start ambient audio (browsers may block autoplay).</div>
+        <div id="credits">South Dhaka Cyclists • For passion</div>
+    </div>
 
-<!-- Ambient audio: replace relax.mp3 with your audio file. -->
-<audio id="bgAudio" loop preload="auto" src="https://api.sdcian.com/api/uploads/tempFile/somewhere_only_we_know.mp3"></audio>
+    <!-- Ambient audio: replace relax.mp3 with your audio file. -->
+    <audio id="bgAudio" loop preload="auto" src="assets/somewhere_only_we_know.mp3"></audio>
 
-<script>
-(() => {
-  const canvas = document.getElementById('c');
-  const ctx = canvas.getContext('2d', { alpha: false });
-  let DPR = Math.max(1, window.devicePixelRatio || 1);
-
-  function resize() {
-    DPR = Math.max(1, window.devicePixelRatio || 1);
-    canvas.width = Math.floor(window.innerWidth * DPR);
-    canvas.height = Math.floor(window.innerHeight * DPR);
-    canvas.style.width = window.innerWidth + 'px';
-    canvas.style.height = window.innerHeight + 'px';
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  // World state
-  let worldOffset = 0;           // how far world scrolled
-  let baseSpeed = 1.0;          // world speed multiplier
-  let speedMultiplier = 1.0;    // changed by UI
-  const bikeX = () => Math.max(120, canvas.width * 0.35); // fixed horizontal pos for bike
-
-  // Time / day-night cycle
-  const cycleSeconds = 60; // full day-night cycle duration in seconds
-  let timeOfDay = 0;       // 0..1 where 0 = sunrise, 0.5 = sunset, 1 = back to sunrise
-
-  // Layers: each has parallax factor, draw function
-  const clouds = [];
-  const trees = [];
-  const hills = [];
-
-  // init clouds
-  for (let i=0;i<6;i++){
-    clouds.push({
-      x: Math.random()*canvas.width*1.5,
-      y: 40 + Math.random()*(canvas.height*0.25),
-      w: 80 + Math.random()*160,
-      h: 30 + Math.random()*30,
-      speed: 0.2 + Math.random()*0.6
-    });
-  }
-
-  // init trees (bgObjects)
-  function spawnTree(layer) {
-    // layer: 0 far, 1 mid, 2 near
-    const baseY = canvas.height*0.72;
-    const size = [0.6, 1.0, 1.6][layer] * (30 + Math.random()*60);
-    return {
-      x: Math.random()*canvas.width*2,
-      y: baseY - (layer*30) - (Math.random()*60),
-      size,
-      layer,
-      speed: [0.15, 0.35, 0.9][layer]*(0.6+Math.random()*0.8)
-    }
-  }
-  for(let i=0;i<20;i++){
-    const layer = Math.floor(Math.random()*3);
-    trees.push(spawnTree(layer));
-  }
-
-  // hills
-  for(let i=0;i<5;i++){
-    hills.push({
-      x: i * 400,
-      w: 800 + Math.random()*600,
-      h: 40 + i*20 + Math.random()*80,
-      colorOffset: -10 + Math.random()*20
-    });
-  }
-
-  // Bike state
-  const bike = {
-    wheelRadius: 20,
-    wheelDistance: 70,
-    bodyW: 120,
-    bodyH: 36,
-    tilt: 0,
-    wheelRotation: 0 // radians
-  };
-
-  // Colors helpers
-  function lerp(a,b,t){ return a + (b-a)*t; }
-  function lerpColor(c1,c2,t){
-    // c: [r,g,b]
-    return [
-      Math.round(lerp(c1[0], c2[0], t)),
-      Math.round(lerp(c1[1], c2[1], t)),
-      Math.round(lerp(c1[2], c2[2], t))
-    ];
-  }
-  function rgbStr(c){ return `rgb(${c[0]},${c[1]},${c[2]})`; }
-
-  // Sky colors: day sky and night sky
-  const dayTop = [135,206,235]; // light sky
-  const dayBottom = [224,246,255];
-  const nightTop = [10,14,40]; // deep
-  const nightBottom = [26,32,60];
-
-  // Sun color
-  const sunDay = [255,210,70];
-  const moonColor = [220,230,255];
-
-  // Terrain function (sine waves)
-  function groundHeightAt(worldX){
-    // worldX in pixels
-    const s = 0.001; // frequency scale
-    // combine a few sine waves for hills
-    const h = Math.sin(worldX * s * 0.8)*40 + Math.sin(worldX * s * 1.7)*18 + Math.sin(worldX * s * 0.35)*70;
-    const base = canvas.height * 0.78;
-    return base - h;
-  }
-  function groundTangentAt(worldX){
-    // derivative approx to compute slope for tilt
-    const dx = 1;
-    const h1 = groundHeightAt(worldX);
-    const h2 = groundHeightAt(worldX+dx);
-    return (h2 - h1) / dx;
-  }
-
-  // draw one tree (simple stylized)
-  function drawTree(x,y,size){
-    ctx.save();
-    ctx.translate(x,y);
-    // trunk
-    ctx.fillStyle = '#6b4423';
-    ctx.fillRect(-size*0.08, 0, size*0.16, size*0.7);
-    // crowns: layered circles / ovals
-    ctx.fillStyle = '#145a2a';
-    ctx.beginPath();
-    ctx.ellipse(0, -size*0.1, size*0.55, size*0.5, 0, 0, Math.PI*2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(-size*0.25, -size*0.35, size*0.38, size*0.34, 0, 0, Math.PI*2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(size*0.25, -size*0.35, size*0.38, size*0.34, 0, 0, Math.PI*2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  // draw hills
-  function drawHills(offset){
-    hills.forEach((h, idx) => {
-      const par = 0.2 + idx*0.15;
-      ctx.save();
-      ctx.beginPath();
-      const startX = -500;
-      ctx.moveTo(startX, canvas.height);
-      for (let x = startX; x <= canvas.width + 500; x+=6){
-        const worldX = (x + offset*par);
-        const y = canvas.height - 30 - Math.sin(worldX*0.0006 + idx)*h.h - (idx*15);
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(canvas.width+500, canvas.height);
-      ctx.closePath();
-      // color slightly darker for farther layers
-      const shade = 40 + idx*10;
-      ctx.fillStyle = `rgb(${80-shade},${140-shade},${90-shade})`;
-      ctx.fill();
-      ctx.restore();
-    });
-  }
-
-  // draw clouds
-  function drawClouds(dt){
-    clouds.forEach(c=>{
-      ctx.save();
-      ctx.globalAlpha = 0.95;
-      const sx = Math.round(c.x);
-      ctx.beginPath();
-      // three overlapping ellipses
-      ctx.ellipse(sx, c.y, c.w*0.7, c.h*0.7, 0, 0, Math.PI*2);
-      ctx.ellipse(sx + c.w*0.4, c.y+6, c.w*0.55, c.h*0.6, 0, 0, Math.PI*2);
-      ctx.ellipse(sx - c.w*0.4, c.y+4, c.w*0.52, c.h*0.58, 0, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(255,255,255,0.95)';
-      ctx.fill();
-      ctx.restore();
-
-      // move
-      c.x -= c.speed * dt * 0.05;
-      if (c.x < -300) c.x = canvas.width + 300 + Math.random()*600;
-    });
-  }
-
-  // draw trees parallax
-  function drawTrees(offset){
-    trees.forEach(t => {
-      const par = [0.25, 0.6, 1.0][t.layer];
-      const x = t.x - offset * par;
-      // if offscreen to left, respawn on right
-      if (x < -200) {
-        t.x += canvas.width*1.8 + Math.random()*200;
-      }
-      // far trees muted color
-      ctx.save();
-      ctx.globalAlpha = 0.95;
-      ctx.translate(x, t.y);
-      const scale = t.size / 100;
-      ctx.scale(scale, scale);
-      drawTree(0,0,t.size*0.8);
-      ctx.restore();
-    });
-  }
-
-  // draw ground strip and road
-  function drawGround(offset){
-    // ground base
-    ctx.save();
-    // draw a continuous ground silhouette using groundHeightAt
-    ctx.beginPath();
-    ctx.moveTo(0, canvas.height);
-    for (let x = 0; x <= canvas.width; x+=4){
-      const worldX = x + offset;
-      const y = groundHeightAt(worldX);
-      ctx.lineTo(x, y);
-    }
-    ctx.lineTo(canvas.width, canvas.height);
-    ctx.closePath();
-    ctx.fillStyle = '#2f8b3a';
-    ctx.fill();
-
-    // road band
-    ctx.beginPath();
-    const roadYoffset = 18;
-    ctx.moveTo(0, canvas.height);
-    for (let x = 0; x <= canvas.width; x+=4){
-      const worldX = x + offset;
-      const y = groundHeightAt(worldX) + roadYoffset;
-      ctx.lineTo(x, y);
-    }
-    ctx.lineTo(canvas.width, canvas.height);
-    ctx.closePath();
-    ctx.fillStyle = '#4a4a4a';
-    ctx.fill();
-
-    // road dashed center (simple)
-    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-    ctx.lineWidth = 3;
-    ctx.setLineDash([18, 30]);
-    ctx.beginPath();
-    for (let x = -100; x <= canvas.width+200; x+=20){
-      const worldX = x + offset + (performance.now()*0.05);
-      const y = groundHeightAt(worldX) + roadYoffset;
-      if (x===-100) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.restore();
-  }
-
-  // draw bike (simple stylized)
-  function drawBike(worldOff, dt){
-    const x = bikeX();
-    const worldX = x + worldOff;
-    const y = groundHeightAt(worldX) - 14; // seat offset above ground
-    const slope = groundTangentAt(worldX); // dy/dx
-    const angle = Math.atan(slope);
-
-    // wheel rotation based on world speed (distance moved -> rotation)
-    const speed = baseSpeed * speedMultiplier;
-    bike.wheelRotation += (worldOffsetDelta * 0.02) / (bike.wheelRadius*0.06);
-
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(angle * 0.9); // tilt with slope
-    // draw wheels
-    const wr = bike.wheelRadius;
-    const wd = bike.wheelDistance;
-    // rear wheel
-    drawWheel(-wd*0.5, 0, wr, bike.wheelRotation);
-    // front wheel
-    drawWheel(wd*0.5, 0, wr, bike.wheelRotation);
-
-    // frame
-    ctx.save();
-    ctx.fillStyle = '#222';
-    ctx.beginPath();
-    ctx.moveTo(-wd*0.5, -4);
-    ctx.lineTo(-wd*0.1, -10);
-    ctx.lineTo(wd*0.05, -18);
-    ctx.lineTo(wd*0.55, -8);
-    ctx.lineTo(wd*0.45, -3);
-    ctx.lineTo(wd*0.05, -10);
-    ctx.lineTo(-wd*0.5, -4);
-    ctx.closePath();
-    ctx.fill();
-
-    // seat
-    ctx.fillStyle = '#222';
-    ctx.fillRect(-12, -22, 24, 6);
-
-    // handlebar
-    ctx.fillStyle = '#222';
-    ctx.fillRect(wd*0.52, -28, 4, 16);
-    ctx.fillRect(wd*0.62, -30, 24, 4);
-
-    ctx.restore();
-    ctx.restore();
-  }
-
-  function drawWheel(cx, cy, r, rot){
-    ctx.save();
-    ctx.translate(cx, cy);
-    // rim
-    ctx.beginPath();
-    ctx.fillStyle = '#0b0b0b';
-    ctx.arc(0,0,r+4,0,Math.PI*2);
-    ctx.fill();
-    // tyre
-    ctx.beginPath();
-    ctx.fillStyle = '#111';
-    ctx.arc(0,0,r,0,Math.PI*2);
-    ctx.fill();
-    // spokes
-    ctx.save();
-    ctx.rotate(rot);
-    ctx.strokeStyle = 'rgba(220,220,220,0.9)';
-    ctx.lineWidth = 2;
-    const spokes = 8;
-    for (let i=0;i<spokes;i++){
-      const a = (i / spokes) * Math.PI * 2;
-      ctx.beginPath();
-      ctx.moveTo(0,0);
-      ctx.lineTo(Math.cos(a)*(r-6), Math.sin(a)*(r-6));
-      ctx.stroke();
-    }
-    ctx.restore();
-    // hub
-    ctx.beginPath();
-    ctx.fillStyle = '#888';
-    ctx.arc(0,0,r*0.22,0,Math.PI*2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  // sun rendering
-  function drawSun(t){
-    // t in 0..1 cycles day->night
-    const phi = t * Math.PI * 2; // angle around
-    // sun x: map phi to left->right horizontally
-    const sx = canvas.width * (0.1 + 0.8 * t);
-    // sun y: arch across the sky (lower at edges)
-    const sunY = canvas.height * 0.18 + Math.sin(Math.PI * t) * canvas.height * 0.18;
-    const size = 40 + Math.sin(Math.PI * t) * 12;
-    // color lerp: daytime sun vs moon
-    const sc = lerpColor(sunDay, moonColor, Math.max(0, 1 - Math.abs(0.5 - t)*2));
-    ctx.save();
-    // glow
-    const g = ctx.createRadialGradient(sx, sunY, 0, sx, sunY, size*6);
-    const color = `rgba(${sc[0]},${sc[1]},${sc[2]},`;
-    g.addColorStop(0, color + '0.9)');
-    g.addColorStop(0.5, color + '0.25)');
-    g.addColorStop(1, color + '0.0)');
-    ctx.fillStyle = g;
-    ctx.beginPath();
-    ctx.arc(sx, sunY, size*6, 0, Math.PI*2);
-    ctx.fill();
-
-    // sun/moon circle
-    ctx.beginPath();
-    ctx.arc(sx, sunY, size, 0, Math.PI*2);
-    ctx.fillStyle = `rgb(${sc[0]},${sc[1]},${sc[2]})`;
-    ctx.fill();
-    ctx.restore();
-  }
-
-  // main loop
-  let last = performance.now();
-  let fpsCounter = 0;
-  let fpsTimer = 0;
-  let worldOffsetDelta = 0;
-
-  function frame(now){
-    const dt = Math.min(40, now - last); // ms (clamp)
-    last = now;
-    const seconds = dt / 1000;
-
-    // advance time-of-day slowly
-    timeOfDay += (seconds / cycleSeconds);
-    timeOfDay = timeOfDay % 1;
-
-    const speed = baseSpeed * speedMultiplier;
-    worldOffsetDelta = speed * seconds * 120; // tune multiplier for feel
-    worldOffset += worldOffsetDelta;
-
-    // sky gradient
-    // dayFactor: 0..1 where 0=night, 1=day. Use a smooth curve: highest at 0.25..0.75
-    // We want sunrise at 0.0, noon at 0.25, sunset at 0.5, midnight at 0.75, back at 1.0
-    // Use a cosine to smooth
-    const dayFactor = 0.5 + 0.5 * Math.cos((timeOfDay - 0.25) * Math.PI * 2); // rough
-    // but clamp and shape for nicer visuals
-    const df = Math.pow(dayFactor, 1.0);
-
-    const top = lerpColor(nightTop, dayTop, df);
-    const bottom = lerpColor(nightBottom, dayBottom, df);
-
-    // draw sky
-    const g = ctx.createLinearGradient(0,0,0,canvas.height);
-    g.addColorStop(0, rgbStr(top));
-    g.addColorStop(1, rgbStr(bottom));
-    ctx.fillStyle = g;
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-
-    // sun
-    drawSun(timeOfDay);
-
-    // hills
-    drawHills(worldOffset);
-
-    // clouds
-    drawClouds(dt);
-
-    // trees
-    drawTrees(worldOffset);
-
-    // ground + road
-    drawGround(worldOffset);
-
-    // bike
-    drawBike(worldOffset, dt);
-
-    // serene overlay vignette or stars at night
-    if (df < 0.25) {
-      // night: draw stars faintly
-      ctx.save();
-      ctx.globalAlpha = 0.7 - df*2;
-      for (let i=0;i<60;i++){
-        const sx = (i*37 + (worldOffset*0.3) ) % (canvas.width+200) - 100;
-        const sy = 20 + (i*97) % (canvas.height*0.45);
-        ctx.fillStyle = 'rgba(255,255,255,0.8)';
-        ctx.fillRect(sx, sy, 1.5,1.5);
-      }
-      ctx.restore();
-    }
-
-    requestAnimationFrame(frame);
-  }
-
-  // UI buttons
-  const btn = document.getElementById('toggleSound');
-  const audio = document.getElementById('bgAudio');
-  let audioPlaying = false;
-  btn.addEventListener('click', ()=>{
-    if (!audioPlaying){
-      audio.play().catch(()=>{ /* user gesture required — button is user gesture so okay */});
-      btn.textContent = 'Pause Music';
-      audioPlaying = true;
-      document.getElementById('playHint').style.display = 'none';
-    } else {
-      audio.pause();
-      btn.textContent = 'Play Music';
-      audioPlaying = false;
-    }
-  });
-
-  const spUp = document.getElementById('speedUp');
-  const spDown = document.getElementById('speedDown');
-  const spLabel = document.getElementById('speedLabel');
-  spUp.addEventListener('click', ()=>{
-    speedMultiplier = Math.min(2.5, speedMultiplier + 0.1);
-    spLabel.textContent = 'Speed: ' + speedMultiplier.toFixed(1) + 'x';
-  });
-  spDown.addEventListener('click', ()=>{
-    speedMultiplier = Math.max(0.2, speedMultiplier - 0.1);
-    spLabel.textContent = 'Speed: ' + speedMultiplier.toFixed(1) + 'x';
-  });
-
-  // start
-  requestAnimationFrame(frame);
-
-  // expose a quick debug restart on double-click
-  canvas.addEventListener('dblclick', ()=> {
-    // reposition trees
-    for (let t of trees) {
-      t.x = Math.random()*canvas.width*2;
-    }
-  });
-
-})();
-</script>
+    <!-- Game Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/bike.js"></script>
+    <script src="js/hills.js"></script>
+    <script src="js/clouds.js"></script>
+    <script src="js/trees.js"></script>
+    <script src="js/sky.js"></script>
+    <script src="js/sun.js"></script>
+    <script src="js/ground.js"></script>
+    <script src="js/music.js"></script>
+    <script src="bikeRide.js"></script>
 </body>
 </html>

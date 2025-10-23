@@ -1,89 +1,97 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+function init() {
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    function frame(now) {
+        const dt = Math.min(40, now - last); // ms (clamp)
+        last = now;
+        const seconds = dt / 1000;
 
-const skyColor = '#87CEEB';
-const groundColor = '#6BBE44';
-const roadColor = '#555';
-const horizon = canvas.height * 0.7;
+        // advance time-of-day slowly
+        timeOfDay += (seconds / cycleSeconds);
+        timeOfDay = timeOfDay % 1;
 
-const bgObjects = [];
-for (let i = 0; i < 10; i++) {
-  bgObjects.push({
-    x: Math.random() * canvas.width,
-    y: horizon - 50 - Math.random() * 100,
-    size: 30 + Math.random() * 70,
-    speed: 0.3 + Math.random() * 0.3,
-  });
+        const speed = baseSpeed * speedMultiplier;
+        worldOffsetDelta = speed * seconds * 120; // tune multiplier for feel
+        worldOffset += worldOffsetDelta;
+
+        // sky gradient
+        // dayFactor: 0..1 where 0=night, 1=day. Use a smooth curve: highest at 0.25..0.75
+        // We want sunrise at 0.0, noon at 0.25, sunset at 0.5, midnight at 0.75, back at 1.0
+        // Use a cosine to smooth
+        const dayFactor = 0.5 + 0.5 * Math.cos((timeOfDay - 0.25) * Math.PI * 2); // rough
+        // but clamp and shape for nicer visuals
+        const df = Math.pow(dayFactor, 1.0);
+
+        const top = lerpColor(nightTop, dayTop, df);
+        const bottom = lerpColor(nightBottom, dayBottom, df);
+
+        // draw sky
+        const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        g.addColorStop(0, rgbStr(top));
+        g.addColorStop(1, rgbStr(bottom));
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // sun
+        drawSun(timeOfDay);
+
+        // hills
+        drawHills(worldOffset);
+
+        // clouds
+        drawClouds(dt);
+
+        // trees
+        drawTrees(worldOffset);
+
+        // ground + road
+        drawGround(worldOffset);
+
+        // bike
+        drawBike(worldOffset, dt);
+
+        // serene overlay vignette or stars at night
+        if (df < 0.25) {
+            // night: draw stars faintly
+            ctx.save();
+            ctx.globalAlpha = 0.7 - df * 2;
+            for (let i = 0; i < 60; i++) {
+                const sx = (i * 37 + (worldOffset * 0.3)) % (canvas.width + 200) - 100;
+                const sy = 20 + (i * 97) % (canvas.height * 0.45);
+                ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                ctx.fillRect(sx, sy, 1.5, 1.5);
+            }
+            ctx.restore();
+        }
+
+        requestAnimationFrame(frame);
+    }
+
+    // UI buttons
+
+
+    const spUp = document.getElementById('speedUp');
+    const spDown = document.getElementById('speedDown');
+    const spLabel = document.getElementById('speedLabel');
+    spUp.addEventListener('click', () => {
+        speedMultiplier = Math.min(2.5, speedMultiplier + 0.1);
+        spLabel.textContent = 'Speed: ' + speedMultiplier.toFixed(1) + 'x';
+    });
+    spDown.addEventListener('click', () => {
+        speedMultiplier = Math.max(0.2, speedMultiplier - 0.1);
+        spLabel.textContent = 'Speed: ' + speedMultiplier.toFixed(1) + 'x';
+    });
+
+    // start
+    requestAnimationFrame(frame);
+
+    // expose a quick debug restart on double-click
+    canvas.addEventListener('dblclick', () => {
+        // reposition trees
+        for (let t of trees) {
+            t.x = Math.random() * canvas.width * 2;
+        }
+    });
+
 }
 
-const bike = {
-  x: canvas.width / 2 - 50,
-  y: horizon - 30,
-  width: 100,
-  height: 100,
-  frame: 0
-};
-
-const bikeImg = new Image();
-bikeImg.src = 'bike.png'; // replace with your image in /assets
-
-const clouds = Array.from({length: 5}, () => ({
-  x: Math.random() * canvas.width,
-  y: 50 + Math.random() * 200,
-  speed: 0.5 + Math.random() * 0.3
-}));
-
-
-function drawScene() {
-  ctx.fillStyle = skyColor;
-  ctx.fillRect(0, 0, canvas.width, horizon);
-  ctx.fillStyle = groundColor;
-  ctx.fillRect(0, horizon, canvas.width, canvas.height - horizon);
-
-  ctx.fillStyle = roadColor;
-  ctx.fillRect(0, horizon + 20, canvas.width, 40);
-}
-
-function drawBackground() {
-  ctx.fillStyle = '#3C9D4C';
-  bgObjects.forEach(obj => {
-    ctx.beginPath();
-    ctx.arc(obj.x, obj.y, obj.size / 2, 0, Math.PI * 2);
-    ctx.fill();
-    obj.x -= obj.speed;
-    if (obj.x + obj.size < 0) obj.x = canvas.width + Math.random() * 200;
-  });
-}
-
-function drawBike() {
-  if (bikeImg.complete) {
-    ctx.drawImage(bikeImg, bike.x, bike.y, bike.width, bike.height);
-  } else {
-    ctx.fillStyle = 'black';
-    ctx.fillRect(bike.x, bike.y, bike.width, bike.height);
-  }
-}
-
-function drawClouds() {
-  ctx.fillStyle = 'rgba(255,255,255,0.9)';
-  clouds.forEach(cloud => {
-    ctx.beginPath();
-    ctx.ellipse(cloud.x, cloud.y, 60, 30, 0, 0, Math.PI * 2);
-    ctx.fill();
-    cloud.x -= cloud.speed;
-    if (cloud.x < -100) cloud.x = canvas.width + 100;
-  });
-}
-
-function animate() {
-  drawScene();
-  drawBackground();
-  drawBike();
-  drawClouds();
-  requestAnimationFrame(animate);
-}
-
-animate();
+init();
