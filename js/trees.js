@@ -41,21 +41,21 @@ function drawTree(x, y, size) {
 }
 
 // draw trees parallax
-    function drawTrees(offset) {
-        trees.forEach(t => {
-            const par = [0.25, 0.6, 1.0][t.layer];
-            const x = t.x - offset * par;
-            // if offscreen to left, respawn on right
-            if (x < -200) {
-                t.x += canvas.width * 1.8 + Math.random() * 200;
-            }
-            // far trees muted color
-            ctx.save();
-            ctx.globalAlpha = 0.95;
-            ctx.translate(x, t.y);
-            const scale = t.size / 100;
-            ctx.scale(scale, scale);
-            drawTree(0, 0, t.size * 0.8);
-            ctx.restore();
-        });
-    }
+function drawTrees(offset) {
+    trees.forEach(t => {
+        const par = [0.25, 0.6, 1.0][t.layer];
+        const x = t.x - offset * par;
+        // if offscreen to left, respawn on right
+        if (x < -200) {
+            t.x += canvas.width * 1.8 + Math.random() * 200;
+        }
+        // far trees muted color
+        ctx.save();
+        ctx.globalAlpha = 0.95;
+        ctx.translate(x, t.y);
+        const scale = t.size / 100;
+        ctx.scale(scale, scale);
+        drawTree(0, 0, t.size * 0.8);
+        ctx.restore();
+    });
+}

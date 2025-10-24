@@ -17,10 +17,11 @@ resize();
 let worldOffset = 0;           // how far world scrolled
 let baseSpeed = 1.0;          // world speed multiplier
 let speedMultiplier = 1.0;    // changed by UI
+let running = true
 
 
 // Time / day-night cycle
-const cycleSeconds = 60; // full day-night cycle duration in seconds
+let cycleSeconds = 60; // full day-night cycle duration in seconds
 let timeOfDay = 0;       // 0..1 where 0 = sunrise, 0.5 = sunset, 1 = back to sunrise
 
 let last = performance.now();
