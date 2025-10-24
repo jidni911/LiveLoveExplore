@@ -1,14 +1,37 @@
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d', { alpha: false });
+const ASPECT_RATIO = 16 / 9;
+// let DPR = window.devicePixelRatio 
 let DPR = Math.max(1, window.devicePixelRatio || 1);
-
+// let DPR = Math.min(window.devicePixelRatio || 1, 2); 
 function resize() {
     DPR = Math.max(1, window.devicePixelRatio || 1);
+    DPR = window.devicePixelRatio 
+
     canvas.width = Math.floor(window.innerWidth * DPR);
     canvas.height = Math.floor(window.innerHeight * DPR);
     canvas.style.width = window.innerWidth + 'px';
     canvas.style.height = window.innerHeight + 'px';
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    // ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+    // let availableWidth = window.innerWidth;
+    //   let availableHeight = window.innerHeight;
+    //   let targetWidth = availableWidth;
+    //   let targetHeight = availableWidth / ASPECT_RATIO;
+    //   if (targetHeight > availableHeight) {
+    //     // Too tall — fit to height instead
+    //     targetHeight = availableHeight;
+    //     targetWidth = availableHeight * ASPECT_RATIO;
+    //   }
+    //   canvas.width = targetWidth * DPR;
+    //   canvas.height = targetHeight * DPR;
+    //   canvas.style.width = `${targetWidth}px`;
+    //   canvas.style.height = `${targetHeight}px`
+    //    canvas.style.position = "absolute";
+    //   canvas.style.left = `${(availableWidth - targetWidth) / 2}px`;
+    //   canvas.style.top = `${(availableHeight - targetHeight) / 2}px`;
+    //   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
 }
 window.addEventListener('resize', resize);
 resize();
