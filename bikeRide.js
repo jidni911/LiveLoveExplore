@@ -63,9 +63,10 @@ function init() {
 
     // expose a quick debug restart on double-click
     canvas.addEventListener('dblclick', () => {
-        // reposition trees
-        for (let t of trees) {
-            t.x = Math.random() * canvas.width * 2;
+        if(document.fullscreenElement) {
+            document.exitFullscreen();
+        }else {
+            canvas.requestFullscreen();
         }
     });
 
@@ -117,4 +118,11 @@ playToStartwithMusic.addEventListener('click', () => {
     document.getElementById('playToStartwithMusic').style.display = 'none';
 });
 
-
+let toggleFullscreen = document.getElementById('toggleFullscreen');
+toggleFullscreen.addEventListener('click', () => {
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    } else {
+        canvas.requestFullscreen();
+    }
+});

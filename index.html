@@ -70,6 +70,18 @@
             margin-top: 6px;
         }
 
+        #toggleFullscreen {
+            position: absolute;
+            left: 20px;
+            bottom: 10px;
+            z-index: 8;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+        }
+
         #credits {
             position: absolute;
             right: 12px;
@@ -119,6 +131,32 @@
             font-size: 13px;
         }
 
+        /* 🔹 NEW: Ratio dropdown UI */
+        #ratioSelectorContainer {
+            position: absolute;
+            right: 50px;
+            top: 90px;
+            z-index: 9;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 6px 10px;
+            border-radius: 10px;
+            color: var(--ui-white);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #ratioSelector {
+            background: rgba(255, 255, 255, 0.08);
+            color: black
+            border: none;
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
         #playToStart {
             position: absolute;
             left: 50%;
@@ -132,7 +170,8 @@
             font-size: 13px;
             cursor: pointer;
         }
-        #playToStartwithMusic{
+
+        #playToStartwithMusic {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
@@ -154,6 +193,20 @@
         <div id="distanceMeter">Loading...</div>
         <div id="clockface">Loading...</div>
 
+        <!-- 🔹 Aspect ratio selector -->
+        <div id="ratioSelectorContainer">
+            <label for="ratioSelector">Aspect:</label>
+            <select id="ratioSelector">
+                <option value="-1">Auto (Safe Scaling)</option>
+                <option value="1.778">16:9</option>
+                <option value="2">18:9</option>
+                <option value="1.333">4:3</option>
+                <option value="1.5">3:2</option>
+                <option value="1">1:1</option>
+                <option value="0">Default(No Scaling)</option>
+            </select>
+        </div>
+
         <div id="title">
             Live Love Explore 🌿
             <div id="subtitle">Relaxing Bicycle Ride — no hurry, just scenery</div>
@@ -166,28 +219,24 @@
             <button id="speedUp" class="btn">+</button>
         </div>
 
+        <button id="toggleFullscreen" class="btn">Fullscreen</button>
+
         <div id="credits">South Dhaka Cyclists • For passion</div>
-        <div id="playToStart" >
-            Click to start the ride...
-        </div>
-        <div id="playToStartwithMusic">
-            Click to start the ride with music...
-        </div>
+
+        <div id="playToStart">Click to start the ride...</div>
+        <div id="playToStartwithMusic">Click to start the ride with music...</div>
     </div>
 
     <div style="display:none">
         <img id="source" src="assets/bike.png" />
     </div>
 
-    <!-- Ambient audio: replace relax.mp3 with your audio file. -->
     <audio id="bgAudio" loop preload="auto" src="assets/somewhere_only_we_know.mp3"></audio>
 
     <!-- Game Scripts -->
     <script src="js/utils.js"></script>
     <script src="js/bike.js"></script>
-    <!-- <script src="js/hills.js"></script> -->
     <script src="js/clouds.js"></script>
-    <!-- <script src="js/trees.js"></script> -->
     <script src="js/background.js"></script>
     <script src="js/sky.js"></script>
     <script src="js/sun.js"></script>
