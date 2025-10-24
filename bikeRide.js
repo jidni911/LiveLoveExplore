@@ -12,6 +12,7 @@ function init() {
         const speed = baseSpeed * speedMultiplier;
         worldOffsetDelta = speed * seconds * 120; // tune multiplier for feel
         worldOffset += worldOffsetDelta;
+        document.getElementById('distanceMeter').textContent = worldOffset.toFixed(0) + ' meters' + ' (' + worldOffsetDelta.toFixed(1) + ' m/s)';
 
         // sky gradient
         // dayFactor: 0..1 where 0=night, 1=day. Use a smooth curve: highest at 0.25..0.75
@@ -44,7 +45,7 @@ function init() {
         drawTrees(worldOffset);
 
         // ground + road
-        drawGround(worldOffset);
+        drawGround(worldOffset,worldOffset);
 
         // bike
         drawBike(worldOffset, dt);
@@ -95,3 +96,13 @@ function init() {
 }
 
 init();
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'f') {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            canvas.requestFullscreen();
+        }
+    }
+});
