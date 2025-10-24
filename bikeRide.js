@@ -20,21 +20,23 @@ function init() {
         drawSun(timeOfDay);
 
         // hills
-        drawHills(worldOffset);
+        // drawHills(worldOffset);
 
         // clouds
         drawClouds(dt);
 
         // trees
-        drawTrees(worldOffset);
+        // drawTrees(worldOffset,dt);
+        drawBackground(worldOffset, timeOfDay);
+
 
         // ground + road
-        drawGround(worldOffset,worldOffset);
+        drawGround(worldOffset, worldOffset);
 
         // bike
         drawBike(worldOffset, dt);
 
-       
+
 
         requestAnimationFrame(frame);
     }
@@ -86,8 +88,33 @@ document.addEventListener('keydown', event => {
         running = !running;
         if (running) {
             // document.getElementById('playHint').style.display = 'none';
+            document.getElementById('playToStart').style.display = 'none';
+            document.getElementById('playToStartwithMusic').style.display = 'none';
+            audio.play().catch(() => { /* user gesture required — button is user gesture so okay */ });
+            btn.textContent = 'Pause Music';
+            audioPlaying = true;
+        } else {
+            audio.pause();
+            btn.textContent = 'Play Music';
+            audioPlaying = false;
         }
     }
+});
+
+var playToStart = document.getElementById('playToStart');
+var playToStartwithMusic = document.getElementById('playToStartwithMusic');
+playToStart.addEventListener('click', () => {
+    running = true;
+    document.getElementById('playToStart').style.display = 'none';
+    document.getElementById('playToStartwithMusic').style.display = 'none';
+});
+playToStartwithMusic.addEventListener('click', () => {
+    running = true;
+    audio.play().catch(() => { /* user gesture required — button is user gesture so okay */ });
+    btn.textContent = 'Pause Music';
+    audioPlaying = true;
+    document.getElementById('playToStart').style.display = 'none';
+    document.getElementById('playToStartwithMusic').style.display = 'none';
 });
 
 

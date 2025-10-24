@@ -118,6 +118,33 @@
             color: var(--ui-white);
             font-size: 13px;
         }
+
+        #playToStart {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 50%;
+            z-index: 9;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 6px 10px;
+            border-radius: 10px;
+            color: var(--ui-white);
+            font-size: 13px;
+            cursor: pointer;
+        }
+        #playToStartwithMusic{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 55%;
+            z-index: 9;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 6px 10px;
+            border-radius: 10px;
+            color: var(--ui-white);
+            font-size: 13px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -139,8 +166,13 @@
             <button id="speedUp" class="btn">+</button>
         </div>
 
-        <div id="playHint">Tip: Click "Play Music" to start ambient audio (browsers may block autoplay).</div>
         <div id="credits">South Dhaka Cyclists • For passion</div>
+        <div id="playToStart" >
+            Click to start the ride...
+        </div>
+        <div id="playToStartwithMusic">
+            Click to start the ride with music...
+        </div>
     </div>
 
     <div style="display:none">
@@ -153,9 +185,10 @@
     <!-- Game Scripts -->
     <script src="js/utils.js"></script>
     <script src="js/bike.js"></script>
-    <script src="js/hills.js"></script>
+    <!-- <script src="js/hills.js"></script> -->
     <script src="js/clouds.js"></script>
-    <script src="js/trees.js"></script>
+    <!-- <script src="js/trees.js"></script> -->
+    <script src="js/background.js"></script>
     <script src="js/sky.js"></script>
     <script src="js/sun.js"></script>
     <script src="js/ground.js"></script>

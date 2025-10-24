@@ -6,7 +6,6 @@ btn.addEventListener('click', () => {
         audio.play().catch(() => { /* user gesture required — button is user gesture so okay */ });
         btn.textContent = 'Pause Music';
         audioPlaying = true;
-        document.getElementById('playHint').style.display = 'none';
     } else {
         audio.pause();
         btn.textContent = 'Play Music';
@@ -20,7 +19,6 @@ document.onkeyup = (e) => {
             audio.play().catch(() => { /* user gesture required — button is user gesture so okay */ });
             btn.textContent = 'Pause Music';
             audioPlaying = true;
-            document.getElementById('playHint').style.display = 'none';
         } else {
             audio.pause();
             btn.textContent = 'Play Music';
